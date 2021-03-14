@@ -1,0 +1,3 @@
+[submodule "themes/zola_docsascode_theme"]
+	path = themes/zola_docsascode_theme
+	url = https://github.com/ericreg/zola_docsascode_theme.git
