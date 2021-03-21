@@ -17,5 +17,9 @@ highlight_code = true
 
 # leave blank if you don't want disqus
 [extra]
+
+# If true, mathjax will be used to render LaTeX code
 mathjax = true
-disqus_short_name = "e92-blog"
+
+# The short name for the disqus forum.
+disqus_short_name = "ericreg"
