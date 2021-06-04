@@ -1,8 +1,13 @@
 +++
 title = "A Better Shell Prompt"
-+++
+date = "2021-04-04"
 
-Date: 2021-04-04
+[taxonomies]
+tags = ["linux"]
+
+[extra]
+author = "Eric Regina"
++++
 
 I have spent much of time at the command line. Typing in commands, navigating through folders, tab completing,
 getting annoyed when I hear the "bell" sound because the tab complete is invalid and I didn't turn off that annoying
@@ -58,7 +63,7 @@ antigen apply
 When you open a new zsh shell you will see something like the following only once.
 I also type some commands demonstrating the syntax highlighting and auto complete.
 
-![pure](./pure.gif)
+![pure](/images/a-better-shell-prompt/pure.gif)
 
 ## You're Done
 
