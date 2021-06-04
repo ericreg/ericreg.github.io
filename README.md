@@ -15,10 +15,5 @@ View the webpage locally with
 ```bash
 zola serve
 ```
-Add markdown files as new posts in the `content/` folder.
-MathJax and the disqus shortname are set in the toml config.
 
-```toml
-mathjax = true
-disqus_short_name = "ericreg"
-```
+Add markdown files as new posts in the `content/` folder.
