@@ -1,3 +1,3 @@
 [submodule "themes/tale-zola"]
 	path = themes/tale-zola
-	url = git@github.com:ericreg/tale-zola.git
+	url = https://github.com:ericreg/tale-zola.git
