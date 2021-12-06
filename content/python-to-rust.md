@@ -34,12 +34,24 @@ result = ",".join(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9]))
 result = ",".join([str(x) for x in [1, 2, 3, 4, 5, 6, 7, 8, 9]])
 ```
 
-
 ### Rust - `iter().map(...).collect<type>()`
+
+The iteration is slightly difference depending on if you are iterating over a vector, tuple, or array.
+
+Using vectors
 
 ```rust
 let result = vec![1, 2, 3, 4, 5, 6, 7, 8, 9]
     .iter()
+    .map(|x| x.to_string())
+    .collect::<Vec<String>>()
+    .join(",");
+```
+
+Using tuples
+
+```rust
+let result = (1 .. 9)
     .map(|x| x.to_string())
     .collect::<Vec<String>>()
     .join(",");
