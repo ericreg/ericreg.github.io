@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+<title>git-collate | ericreg.github.io</title>
+
+
+
+<meta property="og:title" content="git-collate">
+
+
+
+<meta name="author" content="Eric Regina">
+
+
+<meta property="og:locale" content="en_US">
+
+
+
+
+<link rel="canonical" href="https://ericreg.github.io/git-collate/">
+<meta property="og:url" content="https://ericreg.github.io/git-collate/">
+
+
+
+<meta property="og:site_name" content="ericreg.github.io" />
+
+
+
+  <meta property="og:image" content="https://ericreg.github.io/tale.png">
+  
+  
+
+
+
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-10-31T00:00:00+00:00">
+
+
+
+  <link rel="prev" href="https://ericreg.github.io/a-better-shell-prompt/">
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image"">
+  <meta property="twitter:image" content="https://ericreg.github.io/tale.png">
+
+
+
+  <meta property="twitter:title" content="git-collate">
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "author": {
+    "@type":"Person",
+	  "name":"Eric Regina",
+  },
+  "description": "",
+  "url": "https://ericreg.github.io/git-collate/",
+  "@context":"https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "git-collate"
+  
+    
+    
+      "datePublished":"2021-10-31T00:00:00+00:00",
+    
+    "mainEntityOfPage":{
+      "@type":"WebPage",
+      "@id":"https://ericreg.github.io/git-collate/"
+    },
+  
+}
+</script>
+
+  <link rel="stylesheet" href="https://ericreg.github.io/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://ericreg.github.io/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://ericreg.github.io/assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://ericreg.github.io/assets/apple-touch-icon.png">
+
+  
+
+  
+
+  
+  
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+	integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"
+	integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+	integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+	onload="renderMathInElement(document.body);"></script>
+
+</head>
+
+<body>
+  
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="https://ericreg.github.io">
+        <h2 class="nav-title">ericreg.github.io</h2>
+      </a>
+      <ul>
+        
+          
+            <li><a href="https://ericreg.github.io">Posts</a></li>
+          
+            <li><a href="https://ericreg.github.io/tags">Tags</a></li>
+          
+            <li><a href="https://ericreg.github.io/about">About</a></li>
+          
+        
+      </ul>
+    </div>
+  </nav>
+  
+
+  <main>
+    
+  <div class="post">
+  	<div class="post-info">
+  		<span>Written by</span> Eric Regina<br>
+  		
+  		<span>on&nbsp;</span><time datetime="2021-10-31">October 31, 2021</time>
+  	</div>
+  	<h1 class="post-title">git-collate</h1>
+  	<div class="post-line"></div>
+  	<p>Git is an amazing piece of software but some times simple tasks can take multiple commands and interactive dialogues.
+One common task I find myself doing often is <code>git rebase -i</code> or &quot;squashing&quot; commits into a single commit. I usually do
+this when I am squashing commits on a local feature branch before merging them onto my local &quot;<code>dev</code>&quot; branch which is
+tracked upstream.</p>
+<p>I have a shell function I usually put in my <code>~/.zshrc</code> file. I wish to share it with you in hopes that they will be
+helpful and save a little bit of time.</p>
+<h2 id="git-collate"><code>git-collate</code></h2>
+<pre style="background-color:#212733;">
+<code class="language-bash" data-lang="bash"><span style="color:#ccc9c2;">
+</span><span style="color:#ffd580;">git-collate</span><span style="color:#ccc9c2;">()
+{
+    </span><span style="font-style:italic;color:#5c6773;"># NOTE: This function &quot;collates&quot; git commits between branches into a single
+    # commit. This is useful for when you wish to squash all commit and
+    # provide a single message for them. For example consider the case:
+    #
+    # * 9f20e81 (HEAD -&gt; dev) Finally done
+    # * 63fc6e4 Commit before big refactor
+    # * ce2a40f Starting dev work
+    # * e95df85 (main) Version 1 working
+    #
+    # We could squash the top 3 commits ahead of the main branch into a single commit with the command
+    # git-collate main
+
+    # Read the name of the &quot;from branch&quot;, or the branch we wish to merge to after collating.
+    </span><span style="color:#ffa759;">if </span><span style="color:#f28779;">[ </span><span style="color:#ccc9c2;">$</span><span style="font-style:italic;color:#5ccfe6;"># </span><span style="color:#ffcc66;">-eq</span><span style="color:#ccc9c2;"> 0 </span><span style="color:#f28779;">]</span><span style="color:#f29e74;">; </span><span style="color:#ffa759;">then
+        </span><span style="color:#f28779;">echo </span><span style="color:#bae67e;">&quot;Must provide the name of the branch to collate commits for.&quot;
+        </span><span style="color:#ffa759;">return</span><span style="color:#ccc9c2;"> 1
+    </span><span style="color:#ffa759;">fi
+
+    </span><span style="font-style:italic;color:#5c6773;"># Count the number of commits between the &quot;from branch&quot; and the current branch.
+</span><span style="color:#ccc9c2;">    local NUM_COMMIT=</span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">(</span><span style="color:#ffd580;">git</span><span style="color:#bae67e;"> rev-list $</span><span style="color:#ccc9c2;">1</span><span style="color:#bae67e;">..</span><span style="color:#ffcc66;"> --count --first-parent</span><span style="color:#ccc9c2;">)</span><span style="color:#bae67e;">&quot;
+    </span><span style="color:#ffa759;">if </span><span style="color:#f28779;">[ </span><span style="color:#ccc9c2;">$NUM_COMMIT </span><span style="color:#f29e74;">= </span><span style="color:#bae67e;">&quot;0&quot; </span><span style="color:#f28779;">]</span><span style="color:#f29e74;">; </span><span style="color:#ffa759;">then
+        </span><span style="color:#f28779;">echo </span><span style="color:#bae67e;">&quot;No commits between HEAD and $</span><span style="color:#ccc9c2;">1</span><span style="color:#bae67e;">&quot;</span><span style="color:#ccc9c2;">.
+        </span><span style="color:#ffa759;">return</span><span style="color:#ccc9c2;"> 1
+    </span><span style="color:#ffa759;">fi
+
+    </span><span style="font-style:italic;color:#5c6773;"># We do a &quot;git squash&quot; (without prompting) all the commits
+    # into a single commit with their commit messages concatenated
+</span><span style="color:#ccc9c2;">    git reset</span><span style="color:#ffcc66;"> --soft</span><span style="color:#ccc9c2;"> HEAD</span><span style="font-style:italic;color:#5ccfe6;">~</span><span style="color:#ccc9c2;">$NUM_COMMIT </span><span style="color:#f29e74;">&amp;&amp; </span><span style="color:#ccc9c2cc;">\
+        </span><span style="color:#ffd580;">git</span><span style="color:#ccc9c2;"> commit</span><span style="color:#ffcc66;"> --edit -m</span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">(</span><span style="color:#ffd580;">git</span><span style="color:#bae67e;"> log</span><span style="color:#ffcc66;"> --format</span><span style="color:#f29e74;">=</span><span style="color:#bae67e;">%</span><span style="color:#ccc9c2;">B</span><span style="color:#ffcc66;"> --reverse</span><span style="color:#bae67e;"> HEAD..HEAD@</span><span style="color:#ccc9c2;">{</span><span style="color:#bae67e;">1</span><span style="color:#ccc9c2;">})</span><span style="color:#bae67e;">&quot;
+</span><span style="color:#ccc9c2;">}
+</span></code></pre>
+<p>Here is a gif below showing what it looks like in action.</p>
+<p><img src="/images/git-collate/git_collate.gif" alt="git_collate" /></p>
+<h2 id="gl"><code>gl</code></h2>
+<p>Git is also capable of log messages in a more compact form than <code>git log</code>. I usually use the following alias
+<code>gl</code> in my <code>~/.zshrc</code> as well.</p>
+<pre style="background-color:#212733;">
+<code class="language-bash" data-lang="bash"><span style="color:#f28779;">alias </span><span style="color:#ffd580;">gl</span><span style="color:#f29e74;">=</span><span style="color:#bae67e;">&quot;git log --graph --decorate --pretty=oneline --abbrev-commit&quot;
+</span><span style="color:#f28779;">alias </span><span style="color:#ffd580;">gs</span><span style="color:#f29e74;">=</span><span style="color:#bae67e;">&quot;git status&quot;
+</span></code></pre>
+<p><img src="/images/git-collate/gl.gif" alt="gl" /></p>
+
+  </div>
+
+	<div id="disqus_thread"></div>
+<script>
+	/**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function () { // DON'T EDIT BELOW THIS LINE
+		var d = document, s = d.createElement('script');
+		s.src = 'https://ericreg.disqus.com/embed.js';
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+
+  <div class="pagination">
+  	<a href="https://ericreg.github.io/python-to-rust/" class="left arrow">&#8592;</a>
+		<a href="#" class="top">Top</a>
+		<a href="https://ericreg.github.io/a-better-shell-prompt/" class="right arrow">&#8594;</a>
+  </div>
+
+  </main>
+
+  
+  <footer>
+    <span>&copy; <time datetime="2021-12-21T22:35:03.758772890+00:00">2020-2021</time> Eric Regina. Made with <a href="https://www.getzola.org">Zola</a> with <a href="https://github.com/aaranxu/tale-zola">Tala-Zola</a> theme.</span>
+  </footer>
+  
+</body>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://ericreg.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/a-better-shell-prompt/</loc>
+        <lastmod>2021-04-04</lastmod>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/about/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/git-collate/</loc>
+        <lastmod>2021-10-31</lastmod>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/python-to-rust/</loc>
+        <lastmod>2021-11-20</lastmod>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/tags/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/tags/git/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/tags/linux/</loc>
+    </url>
+    <url>
+        <loc>https://ericreg.github.io/tags/rust/</loc>
+    </url>
+</urlset>

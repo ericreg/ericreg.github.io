@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+<title>A Better Shell Prompt | ericreg.github.io</title>
+
+
+
+<meta property="og:title" content="A Better Shell Prompt">
+
+
+
+<meta name="author" content="Eric Regina">
+
+
+<meta property="og:locale" content="en_US">
+
+
+
+
+<link rel="canonical" href="https://ericreg.github.io/a-better-shell-prompt/">
+<meta property="og:url" content="https://ericreg.github.io/a-better-shell-prompt/">
+
+
+
+<meta property="og:site_name" content="ericreg.github.io" />
+
+
+
+  <meta property="og:image" content="https://ericreg.github.io/tale.png">
+  
+  
+
+
+
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2021-04-04T00:00:00+00:00">
+
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image"">
+  <meta property="twitter:image" content="https://ericreg.github.io/tale.png">
+
+
+
+  <meta property="twitter:title" content="A Better Shell Prompt">
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "author": {
+    "@type":"Person",
+	  "name":"Eric Regina",
+  },
+  "description": "",
+  "url": "https://ericreg.github.io/a-better-shell-prompt/",
+  "@context":"https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "A Better Shell Prompt"
+  
+    
+    
+      "datePublished":"2021-04-04T00:00:00+00:00",
+    
+    "mainEntityOfPage":{
+      "@type":"WebPage",
+      "@id":"https://ericreg.github.io/a-better-shell-prompt/"
+    },
+  
+}
+</script>
+
+  <link rel="stylesheet" href="https://ericreg.github.io/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="https://ericreg.github.io/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://ericreg.github.io/assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://ericreg.github.io/assets/apple-touch-icon.png">
+
+  
+
+  
+
+  
+  
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css"
+	integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"
+	integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+	integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+	onload="renderMathInElement(document.body);"></script>
+
+</head>
+
+<body>
+  
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="https://ericreg.github.io">
+        <h2 class="nav-title">ericreg.github.io</h2>
+      </a>
+      <ul>
+        
+          
+            <li><a href="https://ericreg.github.io">Posts</a></li>
+          
+            <li><a href="https://ericreg.github.io/tags">Tags</a></li>
+          
+            <li><a href="https://ericreg.github.io/about">About</a></li>
+          
+        
+      </ul>
+    </div>
+  </nav>
+  
+
+  <main>
+    
+  <div class="post">
+  	<div class="post-info">
+  		<span>Written by</span> Eric Regina<br>
+  		
+  		<span>on&nbsp;</span><time datetime="2021-04-04">April  4, 2021</time>
+  	</div>
+  	<h1 class="post-title">A Better Shell Prompt</h1>
+  	<div class="post-line"></div>
+  	<p>I have spent much of time at the command line. Typing in commands, navigating through folders, tab completing,
+getting annoyed when I hear the &quot;bell&quot; sound because the tab complete is invalid and I didn't turn off that annoying
+option in the terminal emulator yet. When I first started using the cli, it felt different. It felt awkward. Typing in
+commands instead of selecting from a menu, having to remember all those options and the order they went in. I've been
+using the linux shell now for so long that its mainly muscle memory for me at this point.</p>
+<p>Looking back almost 10 years now, there is much I could have done to customize my shell and improve my usage of it.
+Overtime I've tried many different shells, terminal emulators, terminal multiplexers, utility replacements, etc.
+I think I have extracted enough of the good parts to have what I feel is a better default.</p>
+<p>Its prompt is minimal and its features are very useful and so self explanatory I have never had to explain it to a user.
+In short, this is <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a> with the
+<a href="https://github.com/sindresorhus/pure">pure theme</a> and a few custom antigen plugins.</p>
+<h2 id="installation">Installation</h2>
+<p>Thanks to <a href="https://github.com/zsh-users/antigen">antigen</a> (a package manager for zsh plugins) settings this up can be
+done by simply copying the following to the start of your <code>.zshrc</code>.</p>
+<pre style="background-color:#212733;">
+<code class="language-bash" data-lang="bash"><span style="font-style:italic;color:#5c6773;"># Install antigen if not found. 
+# https://github.com/zsh-users/antigen
+# You can uninstall antigen with
+#   rm -rf $HOME/.antigen*
+</span><span style="color:#ccc9c2;">ANTIGEN_FILE</span><span style="color:#f29e74;">=</span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">HOME</span><span style="color:#bae67e;">/.antigen.zsh&quot;
+</span><span style="color:#ffa759;">if </span><span style="color:#f28779;">[ </span><span style="color:#f29e74;">! </span><span style="color:#ffcc66;">-f </span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">ANTIGEN_FILE</span><span style="color:#bae67e;">&quot; </span><span style="color:#f28779;">]</span><span style="color:#f29e74;">; </span><span style="color:#ffa759;">then
+    </span><span style="color:#f28779;">echo </span><span style="color:#bae67e;">&quot;Installing antigen!...&quot;
+    </span><span style="color:#ffd580;">curl</span><span style="color:#ffcc66;"> -sL</span><span style="color:#ccc9c2;"> git.io/antigen </span><span style="color:#f29e74;">&gt; </span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">ANTIGEN_FILE</span><span style="color:#bae67e;">&quot;
+</span><span style="color:#ffa759;">fi
+
+</span><span style="font-style:italic;color:#5c6773;"># Load antigen
+</span><span style="color:#ccc9c2;">source </span><span style="color:#bae67e;">&quot;$</span><span style="color:#ccc9c2;">ANTIGEN_FILE</span><span style="color:#bae67e;">&quot;
+</span><span style="color:#ffd580;">antigen</span><span style="color:#ccc9c2;"> use oh-my-zsh
+
+</span><span style="font-style:italic;color:#5c6773;"># Git status arrows in the shell prompt
+</span><span style="color:#ccc9c2;">antigen bundle git
+
+</span><span style="font-style:italic;color:#5c6773;"># Auto-suggest lookup https://github.com/zsh-users/zsh-autosuggestions
+</span><span style="color:#ccc9c2;">antigen bundle zsh-users/zsh-autosuggestions
+
+</span><span style="font-style:italic;color:#5c6773;"># Use pure theme https://github.com/sindresorhus/pure
+</span><span style="color:#ccc9c2;">antigen bundle mafredri/zsh-async
+</span><span style="color:#ffd580;">antigen</span><span style="color:#ccc9c2;"> bundle sindresorhus/pure@main
+
+</span><span style="font-style:italic;color:#5c6773;"># Syntax highlighting
+</span><span style="color:#ccc9c2;">antigen bundle zsh-users/zsh-syntax-highlighting
+
+</span><span style="font-style:italic;color:#5c6773;"># Apply antigen settings
+</span><span style="color:#ccc9c2;">antigen apply
+</span></code></pre>
+<p>When you open a new zsh shell you will see something like the following only once.
+I also type some commands demonstrating the syntax highlighting and auto complete.</p>
+<p><img src="/images/a-better-shell-prompt/pure.gif" alt="pure" /></p>
+<h2 id="you-re-done">You're Done</h2>
+<p>Thats it. The &quot;installation&quot; of antigen is managed all in the <code>.zshrc</code> itself making this setup very
+portable. Hopefully your experience at the command line will be a little smoother now.</p>
+<p>If you don't like these changes, then remove the code you added to your <code>~/.zshrc</code> and run</p>
+<pre style="background-color:#212733;">
+<code class="language-bash" data-lang="bash"><span style="color:#ffd580;">rm</span><span style="color:#ffcc66;"> -rf </span><span style="color:#ccc9c2;">$HOME/.antigen</span><span style="color:#f29e74;">*
+</span></code></pre><h2 id="extras">Extras</h2>
+<p>If you like this suggestion, you may also be interested in the following projects</p>
+<ul>
+<li><strong><a href="https://github.com/ogham/exa">exa</a></strong> - A better, colorful <code>ls</code>.</li>
+<li><strong><a href="https://github.com/sindresorhus/trash-cli">trash-cli</a></strong> - Stop <em>removing</em> files with rm and just move them to the
+trash. Also made by the creator of the pure theme.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/ogham/exa">https://github.com/ogham/exa</a></li>
+<li><a href="https://github.com/sindresorhus/pure">https://github.com/sindresorhus/pure</a></li>
+<li><a href="https://github.com/zsh-users/antigen">https://github.com/zsh-users/antigen</a></li>
+<li><a href="https://github.com/zsh-users/zsh-autosuggestions">https://github.com/zsh-users/zsh-autosuggestions</a></li>
+</ul>
+
+  </div>
+
+	<div id="disqus_thread"></div>
+<script>
+	/**
+	*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+	*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+	/*
+	var disqus_config = function () {
+	this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+	this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+	*/
+	(function () { // DON'T EDIT BELOW THIS LINE
+		var d = document, s = d.createElement('script');
+		s.src = 'https://ericreg.disqus.com/embed.js';
+		s.setAttribute('data-timestamp', +new Date());
+		(d.head || d.body).appendChild(s);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+		Disqus.</a></noscript>
+
+  <div class="pagination">
+  	<a href="https://ericreg.github.io/git-collate/" class="left arrow">&#8592;</a>
+		<a href="#" class="top">Top</a>
+		
+  </div>
+
+  </main>
+
+  
+  <footer>
+    <span>&copy; <time datetime="2021-12-21T22:35:03.758904593+00:00">2020-2021</time> Eric Regina. Made with <a href="https://www.getzola.org">Zola</a> with <a href="https://github.com/aaranxu/tale-zola">Tala-Zola</a> theme.</span>
+  </footer>
+  
+</body>
+</html>

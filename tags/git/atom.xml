@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>ericreg.github.io - git</title>
+	<link href="https://ericreg.github.io/tags/git/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://ericreg.github.io"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2021-10-31T00:00:00+00:00</updated>
+	<id>https://ericreg.github.io/tags/git/atom.xml</id>
+	<entry xml:lang="en">
+		<title>git-collate</title>
+		<published>2021-10-31T00:00:00+00:00</published>
+		<updated>2021-10-31T00:00:00+00:00</updated>
+		<link href="https://ericreg.github.io/git-collate/" type="text/html"/>
+		<id>https://ericreg.github.io/git-collate/</id>
+		<content type="html">&lt;p&gt;Git is an amazing piece of software but some times simple tasks can take multiple commands and interactive dialogues.
+One common task I find myself doing often is &lt;code&gt;git rebase -i&lt;&#x2F;code&gt; or &amp;quot;squashing&amp;quot; commits into a single commit. I usually do
+this when I am squashing commits on a local feature branch before merging them onto my local &amp;quot;&lt;code&gt;dev&lt;&#x2F;code&gt;&amp;quot; branch which is
+tracked upstream.&lt;&#x2F;p&gt;
+&lt;p&gt;I have a shell function I usually put in my &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; file. I wish to share it with you in hopes that they will be
+helpful and save a little bit of time.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;git-collate&quot;&gt;&lt;code&gt;git-collate&lt;&#x2F;code&gt;&lt;&#x2F;h2&gt;
+&lt;pre style=&quot;background-color:#212733;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;git-collate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;()
+{
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6773;&quot;&gt;# NOTE: This function &amp;quot;collates&amp;quot; git commits between branches into a single
+    # commit. This is useful for when you wish to squash all commit and
+    # provide a single message for them. For example consider the case:
+    #
+    # * 9f20e81 (HEAD -&amp;gt; dev) Finally done
+    # * 63fc6e4 Commit before big refactor
+    # * ce2a40f Starting dev work
+    # * e95df85 (main) Version 1 working
+    #
+    # We could squash the top 3 commits ahead of the main branch into a single commit with the command
+    # git-collate main
+
+    # Read the name of the &amp;quot;from branch&amp;quot;, or the branch we wish to merge to after collating.
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;$&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5ccfe6;&quot;&gt;# &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt;-eq&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt; 0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;then
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;Must provide the name of the branch to collate commits for.&amp;quot;
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt; 1
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;fi
+
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6773;&quot;&gt;# Count the number of commits between the &amp;quot;from branch&amp;quot; and the current branch.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;    local NUM_COMMIT=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt; rev-list $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;..&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt; --count --first-parent&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;$NUM_COMMIT &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;0&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;then
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;No commits between HEAD and $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;.
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt; 1
+    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffa759;&quot;&gt;fi
+
+    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6773;&quot;&gt;# We do a &amp;quot;git squash&amp;quot; (without prompting) all the commits
+    # into a single commit with their commit messages concatenated
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;    git reset&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt; --soft&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt; HEAD&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5ccfe6;&quot;&gt;~&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;$NUM_COMMIT &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;&amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2cc;&quot;&gt;\
+        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt; commit&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt; --edit -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;git&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt; log&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt; --format&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;%&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;B&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffcc66;&quot;&gt; --reverse&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt; HEAD..HEAD@&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;{&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;})&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ccc9c2;&quot;&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here is a gif below showing what it looks like in action.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;git-collate&#x2F;git_collate.gif&quot; alt=&quot;git_collate&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;gl&quot;&gt;&lt;code&gt;gl&lt;&#x2F;code&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Git is also capable of log messages in a more compact form than &lt;code&gt;git log&lt;&#x2F;code&gt;. I usually use the following alias
+&lt;code&gt;gl&lt;&#x2F;code&gt; in my &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; as well.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#212733;&quot;&gt;
+&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;alias &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;gl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;git log --graph --decorate --pretty=oneline --abbrev-commit&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f28779;&quot;&gt;alias &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffd580;&quot;&gt;gs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f29e74;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bae67e;&quot;&gt;&amp;quot;git status&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;git-collate&#x2F;gl.gif&quot; alt=&quot;gl&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>
