@@ -17,10 +17,7 @@ tracked upstream.
 I have a shell function I usually put in my `~/.zshrc` file. I wish to share it with you in hopes that they will be
 helpful and save a little bit of time.
 
-
 ## `git-collate`
-
-
 
 ```bash
 
@@ -51,7 +48,7 @@ git-collate()
         return 1
     fi
 
-    # We do a "git squash" (without prompting) all the commit
+    # We do a "git squash" (without prompting) all the commits
     # into a single commit with their commit messages concatenated
     git reset --soft HEAD~$NUM_COMMIT && \
         git commit --edit -m"$(git log --format=%B --reverse HEAD..HEAD@{1})"
@@ -62,14 +59,14 @@ Here is a gif below showing what it looks like in action.
 
 ![git_collate](/images/git-collate/git_collate.gif)
 
-
-# `gl`
+## `gl`
 
 Git is also capable of log messages in a more compact form than `git log`. I usually use the following alias
 `gl` in my `~/.zshrc` as well.
 
 ```bash
-alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit
+alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit"
+alias gs="git status"
 ```
 
 ![gl](/images/git-collate/gl.gif)
