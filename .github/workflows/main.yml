@@ -21,3 +21,4 @@ jobs:
           PAGES_BRANCH: gh-pages
           # Provide personal access token
           TOKEN: ${{ secrets.TOKEN }}
+          REPOSITORY: ericreg/ericreg.github.io
