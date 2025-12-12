@@ -9,7 +9,6 @@ build_search_index = true
 
 title = "ericregina.com"
 
-# Custom theme from https://github.com/ericreg/zola_docsascode_theme.git 
 theme = "terminus"
 
 # The taxonomies to be rendered for the site and their configuration.
