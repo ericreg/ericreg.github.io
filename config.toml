@@ -22,7 +22,8 @@ highlight_code = true
 highlight_theme = "gruvbox-dark"
 
 [extra]
-# Basic infomation
+
+# Basic information
 author = "Eric Regina"
 github = "https://github.com/ericreg"
 
@@ -43,19 +44,6 @@ header_nav = [
   { url = "/tags", name_en = "Tags" },
   { url = "/about", name_en = "About" }
 ]
-
-## Open Graph + Twitter Cards
-[extra.seo]
-# this image will be used as fallback if a page has no image of its own
-image = "tale.png"
-image_height = 0
-image_width = 0
-og_locale = "en_US"
-
-[extra.footer]
-start_year = "2020" # start year of the site
-end_year = "2021" # end year of the site
-info = "Made with <a href=\"https://www.getzola.org\">Zola</a> with <a href=\"https://github.com/aaranxu/tale-zola\">Tala-Zola</a> theme."
 
 
 # The options below are used to refer to the expressions on the pages, and you
