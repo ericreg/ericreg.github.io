@@ -1,6 +1,6 @@
 +++
 title = "About"
-template = "about/section.html"
+template = "section.html"
 +++
 
 Hello there. This website is a personal blog. It is a place for me to write down various ideas and thoughts of mine.
