@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src-attr 'unsafe-inline'">
+
+    <title>git-collate | ericregina.com</title>
+
+    <link rel="preload" href="https://ericregina.com/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://ericregina.com/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ericregina.com/css/style.css?h=03ffcd7f7190920dba15">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+    <script src="https://ericregina.com/js/auto-close-popover-on-resize.js?h=4ef87d6fc7b98b22e044" defer></script>
+    <script src="https://ericregina.com/js/copy-code-to-clipboard.js?h=6aac77c47d552a0ac847" defer></script>
+
+    <link rel="canonical" href="https://ericregina.com/git-collate/">
+    
+    <meta name="author" content="Eric Regina">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#211f1a">
+    <meta name="color-scheme" content="dark">
+
+    <meta property="og:title" content="git-collate">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://ericregina.com/git-collate/">
+    <meta property="og:site_name" content="ericregina.com">
+    <meta property="og:updated_time" content="2025-12-15T07:49:13.084859137+00:00">
+    <meta property="article:published_time" content="2021-10-31T00:00:00+00:00">
+    <meta property="article:tag" content="linux">
+    <meta property="article:tag" content="git">
+</head>
+
+<body class="layout-center">
+    <header class="header">
+        <div class="header-container">
+            <span class="header-logo-container">
+                <a href="https://ericregina.com">
+                    <span class="logo">ericregina.com</span>
+                </a>
+            </span>
+        </div>
+        <nav class="main-menu" aria-label="Main Menu">
+            <a class="skip-to-content" href="#main">Skip to main content</a>
+            <button class="main-menu-dropdown-button" popovertarget="nav-menu">Menu</button>
+            <ul id="nav-menu" class="main-menu-items" aria-label="Site Navigation" popover>
+                <li><a href="https://ericregina.com/blog/">blog</a></li>
+                <li><a href="https://ericregina.com/archive/">archive</a></li>
+                <li><a href="https://ericregina.com/tags/">tags</a></li>
+                <li><a href="https://ericregina.com/about/">about</a></li>
+                <li><a href="https://github.com/ericreg" target="_blank">github</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="main">
+        <article class="post content">
+            <header>
+                <h1 class="post-title">
+                    <a href="https://ericregina.com/git-collate/">git-collate</a>
+                </h1>
+                <ul class="post-meta hidden">
+                    <li title="Published on 2021-10-31"><time datetime="2021-10-31">2021.10.31</time></li>
+                    <li role="separator" aria-hidden="true">::</li>
+                    <li title="Author">Eric Regina</li>
+                    <li role="separator" aria-hidden="true">::</li>
+                    <li title="149 words"><time datetime="PT1M">1 min</time> read</li>
+                </ul>
+                <div class="post-tags">
+                    <span>#<a rel="tag" href="https://ericregina.com/tags/linux/">linux</a></span>
+                    <span>#<a rel="tag" href="https://ericregina.com/tags/git/">git</a></span>
+                </div>
+            </header>
+
+<p>Git is an amazing piece of software but some times simple tasks can take multiple commands and interactive dialogues.
+One common task I find myself doing often is <code>git rebase -i</code> or "squashing" commits into a single commit. I usually do
+this when I am squashing commits on a local feature branch before merging them onto my local "<code>dev</code>" branch which is
+tracked upstream.</p>
+<p>I have a shell function I usually put in my <code>~/.zshrc</code> file. I wish to share it with you in hopes that they will be
+helpful and save a little bit of time.</p>
+<h2 id="git-collate"><code>git-collate</code></h2>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span>
+</span><span style="color:#8ec07c;">git-collate</span><span>()
+</span><span>{
+</span><span>    </span><span style="font-style:italic;color:#928374;"># NOTE: This function &quot;collates&quot; git commits between branches into a single
+</span><span>    </span><span style="font-style:italic;color:#928374;"># commit. This is useful for when you wish to squash all commit and
+</span><span>    </span><span style="font-style:italic;color:#928374;"># provide a single message for them. For example consider the case:
+</span><span>    </span><span style="font-style:italic;color:#928374;">#
+</span><span>    </span><span style="font-style:italic;color:#928374;"># * 9f20e81 (HEAD -&gt; dev) Finally done
+</span><span>    </span><span style="font-style:italic;color:#928374;"># * 63fc6e4 Commit before big refactor
+</span><span>    </span><span style="font-style:italic;color:#928374;"># * ce2a40f Starting dev work
+</span><span>    </span><span style="font-style:italic;color:#928374;"># * e95df85 (main) Version 1 working
+</span><span>    </span><span style="font-style:italic;color:#928374;">#
+</span><span>    </span><span style="font-style:italic;color:#928374;"># We could squash the top 3 commits ahead of the main branch into a single commit with the command
+</span><span>    </span><span style="font-style:italic;color:#928374;"># git-collate main
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Read the name of the &quot;from branch&quot;, or the branch we wish to merge to after collating.
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[ </span><span style="color:#fdf4c1;">$# -eq 0 </span><span style="color:#fabd2f;">]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;Must provide the name of the branch to collate commits for.&quot;
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># Count the number of commits between the &quot;from branch&quot; and the current branch.
+</span><span style="color:#fdf4c1;">    </span><span style="color:#fa5c4b;">local </span><span style="color:#fdf4c1;">NUM_COMMIT</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$(</span><span style="color:#fdf4c1;">git rev-list $1.. --count --first-parent</span><span style="color:#b8bb26;">)&quot;
+</span><span>    </span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[ </span><span style="color:#fdf4c1;">$NUM_COMMIT </span><span style="color:#fe8019;">= </span><span style="color:#b8bb26;">&quot;0&quot; </span><span style="color:#fabd2f;">]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>        </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;No commits between HEAD and $</span><span style="color:#fdf4c1;">1</span><span style="color:#b8bb26;">&quot;</span><span style="color:#fdf4c1;">.
+</span><span>        </span><span style="color:#fa5c4b;">return</span><span style="color:#fdf4c1;"> 1
+</span><span>    </span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;"># We do a &quot;git squash&quot; (without prompting) all the commits
+</span><span>    </span><span style="font-style:italic;color:#928374;"># into a single commit with their commit messages concatenated
+</span><span>    </span><span style="color:#fdf4c1;">git reset --soft HEAD~$NUM_COMMIT </span><span style="color:#fe8019;">&amp;&amp; </span><span>\
+</span><span>        </span><span style="color:#fdf4c1;">git commit --edit -m</span><span style="color:#b8bb26;">&quot;$(</span><span style="color:#fdf4c1;">git log --format</span><span style="color:#fe8019;">=</span><span style="color:#fdf4c1;">%B --reverse HEAD..HEAD@{1}</span><span style="color:#b8bb26;">)&quot;
+</span><span>}
+</span></code></pre>
+<p>Here is a gif below showing what it looks like in action.</p>
+<p><img src="/images/git-collate/git_collate.gif" alt="git_collate" /></p>
+<h2 id="gl"><code>gl</code></h2>
+<p>Git is also capable of log messages in a more compact form than <code>git log</code>. I usually use the following alias
+<code>gl</code> in my <code>~/.zshrc</code> as well.</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">gl</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;git log --graph --decorate --pretty=oneline --abbrev-commit&quot;
+</span><span style="color:#fabd2f;">alias </span><span style="color:#8ec07c;">gs</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;git status&quot;
+</span></code></pre>
+<p><img src="/images/git-collate/gl.gif" alt="gl" /></p>
+
+        </article>
+        <nav class="post-navigation">
+            <header class="post-navigation-title">
+                <h2>Read More Posts</h2>
+                <hr>
+            </header>
+            <div class="post-navigation-buttons">
+                <a rel="next" href="https://ericregina.com/zinc-lang/" aria-label="Next article">
+                    <span aria-hidden="true">&lt;&nbsp;[</span>Zinc - A pythonic take on Rust<span aria-hidden="true">]</span>
+                </a>
+                <span aria-hidden="true" role="separator">::</span>
+                <a rel="prev" href="https://ericregina.com/a-better-shell-prompt/" aria-label="Prev article">
+                    <span aria-hidden="true">[</span>A Better Shell Prompt<span aria-hidden="true">]&nbsp;&gt;</span>
+                </a>
+            </div>
+        </nav>
+    </main>
+    <footer class="footer">
+        <address class="socials">
+            <ul>
+                <li>
+                    <a class="social-link" rel="me" href="mailto:eregina92@gmail.com" title="email" aria-label="email">
+                        <svg role="img" aria-label="email icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/email.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://github.com/ericreg" title="github" aria-label="github">
+                        <svg role="img" aria-label="github icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/github.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://www.linkedin.com/in/ericregina" title="linkedin" aria-label="linkedin">
+                        <svg role="img" aria-label="linkedin icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/linkedin.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://www.discord.com/users/385938772535279617" title="discord" aria-label="discord">
+                        <svg role="img" aria-label="discord icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/discord.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </address>
+        <p class="copyright">
+            <span>© <time>2025</time> Eric Regina</span>
+        </p>
+    </footer>
+</body>
+
+</html>

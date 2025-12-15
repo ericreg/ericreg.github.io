@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>ericregina.com - linux</title>
+    <link rel="self" type="application/atom+xml" href="https://ericregina.com/tags/linux/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://ericregina.com"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2021-10-31T00:00:00+00:00</updated>
+    <id>https://ericregina.com/tags/linux/atom.xml</id>
+    <entry xml:lang="en">
+        <title>git-collate</title>
+        <published>2021-10-31T00:00:00+00:00</published>
+        <updated>2021-10-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Eric Regina
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ericregina.com/git-collate/"/>
+        <id>https://ericregina.com/git-collate/</id>
+        
+        <content type="html" xml:base="https://ericregina.com/git-collate/">&lt;p&gt;Git is an amazing piece of software but some times simple tasks can take multiple commands and interactive dialogues.
+One common task I find myself doing often is &lt;code&gt;git rebase -i&lt;&#x2F;code&gt; or &quot;squashing&quot; commits into a single commit. I usually do
+this when I am squashing commits on a local feature branch before merging them onto my local &quot;&lt;code&gt;dev&lt;&#x2F;code&gt;&quot; branch which is
+tracked upstream.&lt;&#x2F;p&gt;
+&lt;p&gt;I have a shell function I usually put in my &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; file. I wish to share it with you in hopes that they will be
+helpful and save a little bit of time.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;git-collate&quot;&gt;&lt;code&gt;git-collate&lt;&#x2F;code&gt;&lt;&#x2F;h2&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;git-collate&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# NOTE: This function &amp;quot;collates&amp;quot; git commits between branches into a single
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# commit. This is useful for when you wish to squash all commit and
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# provide a single message for them. For example consider the case:
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# * 9f20e81 (HEAD -&amp;gt; dev) Finally done
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# * 63fc6e4 Commit before big refactor
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# * ce2a40f Starting dev work
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# * e95df85 (main) Version 1 working
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# We could squash the top 3 commits ahead of the main branch into a single commit with the command
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# git-collate main
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Read the name of the &amp;quot;from branch&amp;quot;, or the branch we wish to merge to after collating.
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;$# -eq 0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;then
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;Must provide the name of the branch to collate commits for.&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; 1
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;fi
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Count the number of commits between the &amp;quot;from branch&amp;quot; and the current branch.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;local &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;NUM_COMMIT&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;git rev-list $1.. --count --first-parent&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;)&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;$NUM_COMMIT &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;0&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;then
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;No commits between HEAD and $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;.
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt; 1
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;fi
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# We do a &amp;quot;git squash&amp;quot; (without prompting) all the commits
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# into a single commit with their commit messages concatenated
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;git reset --soft HEAD~$NUM_COMMIT &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;&amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span&gt;\
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;git commit --edit -m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;git log --format&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;%B --reverse HEAD..HEAD@{1}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;)&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here is a gif below showing what it looks like in action.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;git-collate&#x2F;git_collate.gif&quot; alt=&quot;git_collate&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;gl&quot;&gt;&lt;code&gt;gl&lt;&#x2F;code&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Git is also capable of log messages in a more compact form than &lt;code&gt;git log&lt;&#x2F;code&gt;. I usually use the following alias
+&lt;code&gt;gl&lt;&#x2F;code&gt; in my &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; as well.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;alias &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;gl&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;git log --graph --decorate --pretty=oneline --abbrev-commit&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;alias &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8ec07c;&quot;&gt;gs&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;git status&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;git-collate&#x2F;gl.gif&quot; alt=&quot;gl&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>A Better Shell Prompt</title>
+        <published>2021-04-04T00:00:00+00:00</published>
+        <updated>2021-04-04T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Eric Regina
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ericregina.com/a-better-shell-prompt/"/>
+        <id>https://ericregina.com/a-better-shell-prompt/</id>
+        
+        <content type="html" xml:base="https://ericregina.com/a-better-shell-prompt/">&lt;p&gt;I have spent much of time at the command line. Typing in commands, navigating through folders, tab completing,
+getting annoyed when I hear the &quot;bell&quot; sound because the tab complete is invalid and I didn&#x27;t turn off that annoying
+option in the terminal emulator yet. When I first started using the cli, it felt different. It felt awkward. Typing in
+commands instead of selecting from a menu, having to remember all those options and the order they went in. I&#x27;ve been
+using the linux shell now for so long that its mainly muscle memory for me at this point.&lt;&#x2F;p&gt;
+&lt;p&gt;Looking back almost 10 years now, there is much I could have done to customize my shell and improve my usage of it.
+Overtime I&#x27;ve tried many different shells, terminal emulators, terminal multiplexers, utility replacements, etc.
+I think I have extracted enough of the good parts to have what I feel is a better default.&lt;&#x2F;p&gt;
+&lt;p&gt;Its prompt is minimal and its features are very useful and so self explanatory I have never had to explain it to a user.
+In short, this is &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Z_shell&quot;&gt;zsh&lt;&#x2F;a&gt; with the
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sindresorhus&#x2F;pure&quot;&gt;pure theme&lt;&#x2F;a&gt; and a few custom antigen plugins.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;antigen&quot;&gt;antigen&lt;&#x2F;a&gt; (a package manager for zsh plugins) settings this up can be
+done by simply copying the following to the start of your &lt;code&gt;.zshrc&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Install antigen if not found. 
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;antigen
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# You can uninstall antigen with
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;#   rm -rf $HOME&#x2F;.antigen*
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ANTIGEN_FILE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;HOME&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&#x2F;.antigen.zsh&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;[ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;! &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;-f &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ANTIGEN_FILE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;then
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;echo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;Installing antigen!...&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;curl -sL git.io&#x2F;antigen &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ANTIGEN_FILE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fa5c4b;&quot;&gt;fi
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Load antigen
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fabd2f;&quot;&gt;source &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;ANTIGEN_FILE&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b8bb26;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen use oh-my-zsh
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Git status arrows in the shell prompt
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen bundle git
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Auto-suggest lookup https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen bundle zsh-users&#x2F;zsh-autosuggestions
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Use pure theme https:&#x2F;&#x2F;github.com&#x2F;sindresorhus&#x2F;pure
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen bundle mafredri&#x2F;zsh-async
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen bundle sindresorhus&#x2F;pure@main
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Syntax highlighting
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen bundle zsh-users&#x2F;zsh-syntax-highlighting
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#928374;&quot;&gt;# Apply antigen settings
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;antigen apply
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;When you open a new zsh shell you will see something like the following only once.
+I also type some commands demonstrating the syntax highlighting and auto complete.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;a-better-shell-prompt&#x2F;pure.gif&quot; alt=&quot;pure&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;you-re-done&quot;&gt;You&#x27;re Done&lt;&#x2F;h2&gt;
+&lt;p&gt;Thats it. The &quot;installation&quot; of antigen is managed all in the &lt;code&gt;.zshrc&lt;&#x2F;code&gt; itself making this setup very
+portable. Hopefully your experience at the command line will be a little smoother now.&lt;&#x2F;p&gt;
+&lt;p&gt;If you don&#x27;t like these changes, then remove the code you added to your &lt;code&gt;~&#x2F;.zshrc&lt;&#x2F;code&gt; and run&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;rm -rf $HOME&#x2F;.antigen&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fe8019;&quot;&gt;*
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;extras&quot;&gt;Extras&lt;&#x2F;h2&gt;
+&lt;p&gt;If you like this suggestion, you may also be interested in the following projects&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ogham&#x2F;exa&quot;&gt;exa&lt;&#x2F;a&gt;&lt;&#x2F;strong&gt; - A better, colorful &lt;code&gt;ls&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sindresorhus&#x2F;trash-cli&quot;&gt;trash-cli&lt;&#x2F;a&gt;&lt;&#x2F;strong&gt; - Stop &lt;em&gt;removing&lt;&#x2F;em&gt; files with rm and just move them to the
+trash. Also made by the creator of the pure theme.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;ogham&#x2F;exa&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;ogham&#x2F;exa&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;sindresorhus&#x2F;pure&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;sindresorhus&#x2F;pure&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;antigen&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;antigen&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;zsh-users&#x2F;zsh-autosuggestions&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>

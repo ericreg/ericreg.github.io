@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src-attr 'unsafe-inline'">
+
+    <title>A Better Shell Prompt | ericregina.com</title>
+
+    <link rel="preload" href="https://ericregina.com/fonts/FiraCode-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://ericregina.com/fonts/FiraCode-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://ericregina.com/css/style.css?h=03ffcd7f7190920dba15">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+    <script src="https://ericregina.com/js/auto-close-popover-on-resize.js?h=4ef87d6fc7b98b22e044" defer></script>
+    <script src="https://ericregina.com/js/copy-code-to-clipboard.js?h=6aac77c47d552a0ac847" defer></script>
+
+    <link rel="canonical" href="https://ericregina.com/a-better-shell-prompt/">
+    
+    <meta name="author" content="Eric Regina">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#211f1a">
+    <meta name="color-scheme" content="dark">
+
+    <meta property="og:title" content="A Better Shell Prompt">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://ericregina.com/a-better-shell-prompt/">
+    <meta property="og:site_name" content="ericregina.com">
+    <meta property="og:updated_time" content="2025-12-15T07:49:13.084890507+00:00">
+    <meta property="article:published_time" content="2021-04-04T00:00:00+00:00">
+    <meta property="article:tag" content="linux">
+</head>
+
+<body class="layout-center">
+    <header class="header">
+        <div class="header-container">
+            <span class="header-logo-container">
+                <a href="https://ericregina.com">
+                    <span class="logo">ericregina.com</span>
+                </a>
+            </span>
+        </div>
+        <nav class="main-menu" aria-label="Main Menu">
+            <a class="skip-to-content" href="#main">Skip to main content</a>
+            <button class="main-menu-dropdown-button" popovertarget="nav-menu">Menu</button>
+            <ul id="nav-menu" class="main-menu-items" aria-label="Site Navigation" popover>
+                <li><a href="https://ericregina.com/blog/">blog</a></li>
+                <li><a href="https://ericregina.com/archive/">archive</a></li>
+                <li><a href="https://ericregina.com/tags/">tags</a></li>
+                <li><a href="https://ericregina.com/about/">about</a></li>
+                <li><a href="https://github.com/ericreg" target="_blank">github</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="main">
+        <article class="post content">
+            <header>
+                <h1 class="post-title">
+                    <a href="https://ericregina.com/a-better-shell-prompt/">A Better Shell Prompt</a>
+                </h1>
+                <ul class="post-meta hidden">
+                    <li title="Published on 2021-04-04"><time datetime="2021-04-04">2021.04.04</time></li>
+                    <li role="separator" aria-hidden="true">::</li>
+                    <li title="Author">Eric Regina</li>
+                    <li role="separator" aria-hidden="true">::</li>
+                    <li title="409 words"><time datetime="PT3M">3 min</time> read</li>
+                </ul>
+                <div class="post-tags">
+                    <span>#<a rel="tag" href="https://ericregina.com/tags/linux/">linux</a></span>
+                </div>
+            </header>
+
+<p>I have spent much of time at the command line. Typing in commands, navigating through folders, tab completing,
+getting annoyed when I hear the "bell" sound because the tab complete is invalid and I didn't turn off that annoying
+option in the terminal emulator yet. When I first started using the cli, it felt different. It felt awkward. Typing in
+commands instead of selecting from a menu, having to remember all those options and the order they went in. I've been
+using the linux shell now for so long that its mainly muscle memory for me at this point.</p>
+<p>Looking back almost 10 years now, there is much I could have done to customize my shell and improve my usage of it.
+Overtime I've tried many different shells, terminal emulators, terminal multiplexers, utility replacements, etc.
+I think I have extracted enough of the good parts to have what I feel is a better default.</p>
+<p>Its prompt is minimal and its features are very useful and so self explanatory I have never had to explain it to a user.
+In short, this is <a href="https://en.wikipedia.org/wiki/Z_shell">zsh</a> with the
+<a href="https://github.com/sindresorhus/pure">pure theme</a> and a few custom antigen plugins.</p>
+<h2 id="installation">Installation</h2>
+<p>Thanks to <a href="https://github.com/zsh-users/antigen">antigen</a> (a package manager for zsh plugins) settings this up can be
+done by simply copying the following to the start of your <code>.zshrc</code>.</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="font-style:italic;color:#928374;"># Install antigen if not found. 
+</span><span style="font-style:italic;color:#928374;"># https://github.com/zsh-users/antigen
+</span><span style="font-style:italic;color:#928374;"># You can uninstall antigen with
+</span><span style="font-style:italic;color:#928374;">#   rm -rf $HOME/.antigen*
+</span><span style="color:#fdf4c1;">ANTIGEN_FILE</span><span style="color:#fe8019;">=</span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">HOME</span><span style="color:#b8bb26;">/.antigen.zsh&quot;
+</span><span style="color:#fa5c4b;">if </span><span style="color:#fabd2f;">[ </span><span style="color:#fe8019;">! </span><span style="color:#fdf4c1;">-f </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ANTIGEN_FILE</span><span style="color:#b8bb26;">&quot; </span><span style="color:#fabd2f;">]</span><span style="color:#fe8019;">; </span><span style="color:#fa5c4b;">then
+</span><span>    </span><span style="color:#fabd2f;">echo </span><span style="color:#b8bb26;">&quot;Installing antigen!...&quot;
+</span><span>    </span><span style="color:#fdf4c1;">curl -sL git.io/antigen </span><span style="color:#fe8019;">&gt; </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ANTIGEN_FILE</span><span style="color:#b8bb26;">&quot;
+</span><span style="color:#fa5c4b;">fi
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Load antigen
+</span><span style="color:#fabd2f;">source </span><span style="color:#b8bb26;">&quot;$</span><span style="color:#fdf4c1;">ANTIGEN_FILE</span><span style="color:#b8bb26;">&quot;
+</span><span style="color:#fdf4c1;">antigen use oh-my-zsh
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Git status arrows in the shell prompt
+</span><span style="color:#fdf4c1;">antigen bundle git
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Auto-suggest lookup https://github.com/zsh-users/zsh-autosuggestions
+</span><span style="color:#fdf4c1;">antigen bundle zsh-users/zsh-autosuggestions
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Use pure theme https://github.com/sindresorhus/pure
+</span><span style="color:#fdf4c1;">antigen bundle mafredri/zsh-async
+</span><span style="color:#fdf4c1;">antigen bundle sindresorhus/pure@main
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Syntax highlighting
+</span><span style="color:#fdf4c1;">antigen bundle zsh-users/zsh-syntax-highlighting
+</span><span>
+</span><span style="font-style:italic;color:#928374;"># Apply antigen settings
+</span><span style="color:#fdf4c1;">antigen apply
+</span></code></pre>
+<p>When you open a new zsh shell you will see something like the following only once.
+I also type some commands demonstrating the syntax highlighting and auto complete.</p>
+<p><img src="/images/a-better-shell-prompt/pure.gif" alt="pure" /></p>
+<h2 id="you-re-done">You're Done</h2>
+<p>Thats it. The "installation" of antigen is managed all in the <code>.zshrc</code> itself making this setup very
+portable. Hopefully your experience at the command line will be a little smoother now.</p>
+<p>If you don't like these changes, then remove the code you added to your <code>~/.zshrc</code> and run</p>
+<pre data-lang="bash" style="background-color:#282828;color:#fdf4c1aa;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#fdf4c1;">rm -rf $HOME/.antigen</span><span style="color:#fe8019;">*
+</span></code></pre>
+<h2 id="extras">Extras</h2>
+<p>If you like this suggestion, you may also be interested in the following projects</p>
+<ul>
+<li><strong><a href="https://github.com/ogham/exa">exa</a></strong> - A better, colorful <code>ls</code>.</li>
+<li><strong><a href="https://github.com/sindresorhus/trash-cli">trash-cli</a></strong> - Stop <em>removing</em> files with rm and just move them to the
+trash. Also made by the creator of the pure theme.</li>
+</ul>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="https://github.com/ogham/exa">https://github.com/ogham/exa</a></li>
+<li><a href="https://github.com/sindresorhus/pure">https://github.com/sindresorhus/pure</a></li>
+<li><a href="https://github.com/zsh-users/antigen">https://github.com/zsh-users/antigen</a></li>
+<li><a href="https://github.com/zsh-users/zsh-autosuggestions">https://github.com/zsh-users/zsh-autosuggestions</a></li>
+</ul>
+
+        </article>
+        <nav class="post-navigation">
+            <header class="post-navigation-title">
+                <h2>Read More Posts</h2>
+                <hr>
+            </header>
+            <div class="post-navigation-buttons">
+                <a rel="next" href="https://ericregina.com/git-collate/" aria-label="Next article">
+                    <span aria-hidden="true">&lt;&nbsp;[</span>git-collate<span aria-hidden="true">]</span>
+                </a>
+            </div>
+        </nav>
+    </main>
+    <footer class="footer">
+        <address class="socials">
+            <ul>
+                <li>
+                    <a class="social-link" rel="me" href="mailto:eregina92@gmail.com" title="email" aria-label="email">
+                        <svg role="img" aria-label="email icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/email.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://github.com/ericreg" title="github" aria-label="github">
+                        <svg role="img" aria-label="github icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/github.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://www.linkedin.com/in/ericregina" title="linkedin" aria-label="linkedin">
+                        <svg role="img" aria-label="linkedin icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/linkedin.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+                <li>
+                    <a class="social-link" rel="me" href="https://www.discord.com/users/385938772535279617" title="discord" aria-label="discord">
+                        <svg role="img" aria-label="discord icon">
+                            <use aria-hidden="true" href="https://ericregina.com/images/social_icons/discord.svg#icon" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </address>
+        <p class="copyright">
+            <span>© <time>2025</time> Eric Regina</span>
+        </p>
+    </footer>
+</body>
+
+</html>
