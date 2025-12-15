@@ -6,10 +6,12 @@ compile_sass = true
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
-
 title = "ericregina.com"
+theme = "gruv-terminus"
 
-theme = "terminus"
+# The default author for pages
+author = "Eric Regina"
+
 
 # The taxonomies to be rendered for the site and their configuration.
 taxonomies = [{ name = "tags", feed = true }] # each tag will have its own feed
@@ -24,25 +26,27 @@ highlight_theme = "gruvbox-dark"
 
 # Basic information
 author = "Eric Regina"
-github = "https://github.com/ericreg"
 
-# Set date format in the site
-timeformat = "%B %e, %Y" # e.g. June 14, 2021
+main_menu = [
+    { name = "blog", url = "blog", trailing_slash = true },
+    { name = "archive", url = "archive", trailing_slash = true },
+    { name = "tags", url = "tags", trailing_slash = true },
+    { name = "about", url = "about", trailing_slash = true },
+    { name = "github", url = "https://github.com/ericreg", new_tab = true },
+]
+
+socials = [
+    { name = "email", url = "mailto:eregina92@gmail.com" },
+    { name = "github", url = "https://github.com/ericreg" },
+    { name = "linkedin", url = "https://www.linkedin.com/in/ericregina" },
+    { name = "discord", url = "https://www.discord.com/users/385938772535279617" },
+
+]
+
 
 # Whether to support KaTeX globally
-katex = true
+# katex = true
 
-# Whether to use Disqus globally and set to your disqus id
-# or you can enable the disqus on per post page with `extra.disqus` option
-disqus = true
-disqus_id = "ericreg"
-
-# Navigation (required by anemone theme)
-header_nav = [
-  { url = "/", name_en = "Posts" },
-  { url = "/tags", name_en = "Tags" },
-  { url = "/about", name_en = "About" }
-]
 
 
 # The options below are used to refer to the expressions on the pages, and you

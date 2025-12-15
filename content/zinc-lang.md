@@ -1,5 +1,5 @@
 +++
-title = "zinc-lang"
+title = "Zinc - A pythonic take on Rust"
 date = "2025-12-11"
 
 [taxonomies]
