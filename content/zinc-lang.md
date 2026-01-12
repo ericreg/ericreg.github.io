@@ -35,3 +35,65 @@ The three influences behind Zinc are Python, Rust, and Go. This is reflected in 
 The most important principle of Zinc is **readability**. Let’s be honest: if you’re interested in using a language like this, you’re probably not in a “performance at all costs” situation. That said, I will never carelessly sacrifice performance or introduce wrappers or non-zero-overhead abstractions. These are, admittedly, easy words to speak for a toy language that doesn’t do much yet.
 
 As LLMs get better at writing code and we inevitably become bonsai gardeners, I believe the importance of readability will only increase. We need to start thinking about what ***reading*** code looks like for a generation of engineers who may regard writing code the way we now regard writing assembly.
+
+
+## Talk is cheap, Show me the code
+
+Here we will go through some examples of Zinc code and the Rust code it generates.
+
+
+## Hello World
+
+Our classic hello world program in Zinc is given below. The only difference from rust here is the use of `print` instead of `println!`.
+
+```rust
+fn main() {
+    print("Hello, world!");
+}
+```
+
+Unlike python, we declare functions with `fn` and use curly braces for code blocks. I am strongly considering adding significant whitespace as an option in the future so that functions can be defined like so:
+
+```rust
+fn main():
+    print("Hello, world!")
+```
+
+## Variables and Types
+
+In Zinc, we use type inference heavily, similar to Python. However, we can also explicitly declare types when we cannot rely on inference such as in struct fields. Though I suspect it might be possible to infer field types from first usage, this seems a little too magical for my taste. 
+```rust
+fn main() {
+
+    x = 1 // inferred as integer
+    print("x: {x}")
+    
+    x = 3.14 // inferred as float
+    print("x: {x}")
+
+    x = "zinc" // inferred as string
+    print("x: {x}")
+
+    x = true // inferred as bool
+    print("x: {x}")
+}
+```
+
+The above Zinc code is actually very close to valid Rust code. Rust allows type inference for local variables and [shadowing](https://en.wikipedia.org/wiki/Variable_shadowing) of variables. The generated Rust code is as follows:
+
+```rust
+fn main() {
+    let x = 1;
+    println!("x: {}", x);
+
+    let x = 3.14;
+    println!("x: {}", x);
+
+    let x = "zinc";
+    println!("x: {}", x);
+
+    let x = true;
+    println!("x: {}", x);
+}
+```
+
