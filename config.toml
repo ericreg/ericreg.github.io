@@ -77,7 +77,7 @@ emit_metadata = "0"
 input_position = "bottom"
 # A built-in giscus theme name (e.g. "gruvbox_dark") or a path to a hosted CSS file
 # relative to the static/ directory (e.g. "css/giscus-theme.css").
-theme = "gruvbox_dark"
+theme = "css/giscus-theme.css"
 lang = "en"
 
 # Content Security Policy
