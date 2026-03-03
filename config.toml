@@ -12,7 +12,6 @@ theme = "gruv-terminus"
 # The default author for pages
 author = "Eric Regina"
 
-
 # The taxonomies to be rendered for the site and their configuration.
 taxonomies = [{ name = "tags", feed = true }] # each tag will have its own feed
 
@@ -23,10 +22,19 @@ highlight_code = true
 highlight_theme = "gruvbox-dark"
 
 [extra]
-
-# Basic information
 author = "Eric Regina"
+# Close the responsive nav menu when the viewport is resized to desktop width.
+close_responsive_menu_on_resize = true
+# Show a copy-to-clipboard button on code blocks.
+copy_button = true
+# Enable KaTeX math rendering. Can also be set per-page in [extra].
+katex = true
+# Page layout: "left", "center", or "full-width".
+layout = "center"
+# Show the default site author on every post. Set to true or override per-page with authors = [].
+show_default_author = false
 
+# Navigation links shown in the header. Use new_tab = true for external links.
 main_menu = [
     { name = "blog", url = "blog", trailing_slash = true },
     { name = "archive", url = "archive", trailing_slash = true },
@@ -35,19 +43,54 @@ main_menu = [
     { name = "github", url = "https://github.com/ericreg", new_tab = true },
 ]
 
+# Social icons shown in the footer. Supported names: see static/images/social_icons/.
 socials = [
     { name = "email", url = "mailto:eregina92@gmail.com" },
     { name = "github", url = "https://github.com/ericreg" },
     { name = "linkedin", url = "https://www.linkedin.com/in/ericregina" },
     { name = "discord", url = "https://www.discord.com/users/385938772535279617" },
-
 ]
 
+# Giscus comments (https://giscus.app)
+# Requires GitHub Discussions enabled on the repo and the giscus app installed.
+# Generate your values at https://giscus.app.
+# Disable comments on a specific page with [extra] comments = false in frontmatter.
+[extra.giscus]
+enabled = true
+# GitHub repo in "owner/name" format.
+repo = "ericreg/ericreg.github.io"
+# Repo ID from giscus.app.
+repo_id = "MDEwOlJlcG9zaXRvcnkzNDc3NjgwNzQ="
+# Discussion category name.
+category = "General"
+# Category ID from giscus.app.
+category_id = "DIC_kwDOFLqFCs4C3kAK"
+# How posts map to discussions: "pathname", "url", "title", "og:title".
+mapping = "pathname"
+# Use strict title matching: "0" or "1".
+strict = "0"
+# Show reactions on the discussion: "0" or "1".
+reactions_enabled = "0"
+# Emit discussion metadata to the parent page: "0" or "1".
+emit_metadata = "0"
+# Comment box position: "top" or "bottom".
+input_position = "bottom"
+# A built-in giscus theme name (e.g. "gruvbox_dark") or a path to a hosted CSS file
+# relative to the static/ directory (e.g. "css/giscus-theme.css").
+theme = "gruvbox_dark"
+lang = "en"
 
-# Whether to support KaTeX globally
-# katex = true
-
-
+# Content Security Policy
+# Add extra CSP directives here. The template automatically handles
+# 'self', syntax highlighting, emoji favicons, and zola serve requirements.
+[extra.content_security_policy]
+enable = true
+allowed_domains = [
+    { directive = "connect-src", domains = ["'self'", "cloudflareinsights.com"] },
+    { directive = "script-src", domains = ["'self'", "static.cloudflareinsights.com", "giscus.app"] },
+    { directive = "style-src-elem", domains = ["'self'", "giscus.app"] },
+    { directive = "frame-src", domains = ["giscus.app"] },
+]
 
 # The options below are used to refer to the expressions on the pages, and you
 # can custom the contents as needed in your language.
