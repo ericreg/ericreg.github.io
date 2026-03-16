@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>ericregina.com - research</title>
+    <link rel="self" type="application/atom+xml" href="https://ericregina.com/tags/research/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://ericregina.com"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-02-23T00:00:00+00:00</updated>
+    <id>https://ericregina.com/tags/research/atom.xml</id>
+    <entry xml:lang="en">
+        <title>ImageCLEF 2026 GANs Exploratory Data Analysis</title>
+        <published>2026-02-23T00:00:00+00:00</published>
+        <updated>2026-02-23T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Eric Regina
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ericregina.com/image-clef-gans-eda/"/>
+        <id>https://ericregina.com/image-clef-gans-eda/</id>
+        
+        <content type="html" xml:base="https://ericregina.com/image-clef-gans-eda/">&lt;h1 id=&quot;imageclef-2026-gans-exploratory-data-analysis&quot;&gt;ImageCLEF 2026 GANs Exploratory Data Analysis&lt;&#x2F;h1&gt;
+&lt;figure&gt;
+&lt;div class=&quot;image-row&quot;&gt;
+  &lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;real_1.574925decb230e9e.png&quot; alt=&quot;real CT scan&quot; data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;real_1.png&quot; loading=&quot;lazy&quot;&gt;
+  &lt;&#x2F;figure&gt;
+  &lt;figure&gt;
+    &lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;gen_1.a0478bd039511da4.png&quot; alt=&quot;generated CT scan&quot; data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;gen_1.png&quot; loading=&quot;lazy&quot;&gt;
+  &lt;&#x2F;figure&gt;
+&lt;&#x2F;div&gt;&lt;figcaption&gt;&lt;p&gt;One of these is fake, and you can probably already tell which one it is.&lt;&#x2F;p&gt;&lt;&#x2F;figcaption&gt;&lt;&#x2F;figure&gt;
+&lt;p&gt;Recently, I have been leading a small team of 3 students at Georgia Tech in a project to explore the use of generative models for privacy-preserving image generation for CT slices of patients&#x27; lungs. We are specifically participating in the
+&lt;a href=&quot;https:&#x2F;&#x2F;www.imageclef.org&#x2F;2026&#x2F;medical&#x2F;gans&quot;&gt;ImageCLEF 2026 ImageCLEFmed GANs competition&lt;&#x2F;a&gt;
+Subtask 3 &quot;Privacy-preserving CT slice generation&quot;. In this post we will go over some exploratory data analysis on the 2025 dataset. Unfortunately, the 2026 dataset was not available at the time of presenting our results for the EDA work. We were able to acquire the 2025 data and perform some preliminary analysis with the overarching goal being to determine if the 2025 generated dataset was privacy-preserving.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-dataset&quot;&gt;The Dataset&lt;&#x2F;h2&gt;
+&lt;p&gt;We have in total 7000 generated images and 700 real images. Running &lt;code&gt;file&lt;&#x2F;code&gt; on one of the images we get&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;sh&quot; style=&quot;background-color:#282828;color:#fdf4c1aa;&quot; class=&quot;language-sh &quot;&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;❯ file generated_1.png
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdf4c1;&quot;&gt;generated_1.png: PNG image data, 256 x 256, 8-bit colormap, non-interlaced
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;what-are-the-differences-between-the-real-and-generated-datasets&quot;&gt;What are the differences between the real and generated datasets?&lt;&#x2F;h2&gt;
+&lt;p&gt;Certainly, we want to start by asking. Are there any differences at all? The first slide, from team member &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;samirhadi&#x2F;&quot;&gt;Samir Hadi&lt;&#x2F;a&gt;, answers
+that quite well.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.585f95d49acef4b4.png&quot; alt=&quot;texture analysis&quot;
+     width=&quot;1280&quot; height=&quot;376&quot;
+     sizes=&quot;(min-width: 920px) 784px, (min-width: 700px) calc(82vw + 46px), calc(100vw - 40px)&quot; 
+     srcset=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.81dae22da4af98ae.png 640w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.7db8392a0e2a6d6e.png 784w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.75133f6a0554becc.png 1280w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.426c6a0dfe12d15f.png 1920w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;texture_edge_fingerprint.8084cd9aa61b9d82.png 2560w&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;texture_edge_fingerprint.png&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;samirhadi&#x2F;&quot;&gt;Samir Hadi&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;We have a few traditional image processing techniques applied to the real and generated images.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Local Binary Patterns (LBP)&lt;&#x2F;strong&gt;: This describes local texture of an image by comparing each pixel to its neighbors. The resulting patterns can be used to analyze the texture differences between real and generated images. We don&#x27;t see much difference here, which is a good sign for the generated images. We want them to be as close to the real images as possible in terms of texture.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Edge Sharpness&lt;&#x2F;strong&gt;: Here we are looking at the sharpness of edges in the images. The generated images do seem to have, on average, smoother edges than the real images. This is a common artifact of generative models. However, the magnitude of the difference is not huge and there is still substantial overlap between the two distributions.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Intensity Histogram&lt;&#x2F;strong&gt;: This is a histogram of pixel intensities in the images. Here we see
+a very significant difference. The histogram for the generated images is not natural at all, with
+a &quot;spiky&quot; distribution rather than the natural curves of the real images. It almost appears like the
+model is generating images with a limited set of pixel intensities rather than a continuous range.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Below we have an analysis performed by myself using &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Curvelet?useskin=vector&quot;&gt;curvlets&lt;&#x2F;a&gt;. Curvlets are similar to wavelets but are designed to capture edges and curves in images more effectively. Where wavelets are good at capturing point singularities, curvlets are better at capturing &quot;curve singularities&quot;. In more technical terms, curvlets can capture directional information in images, with far fewer coefficients than wavelets for the same level of detail.&lt;&#x2F;p&gt;
+&lt;p&gt;We used the python library &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;cako&#x2F;curvelets&quot;&gt;curvlets&lt;&#x2F;a&gt; to do the analysis for us. Below are the results for 3
+metrics we will explain in a moment. In all three plots below we are looking at the &lt;em&gt;mean difference&lt;&#x2F;em&gt; between the real and generated images.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;curvelets.svg&quot; alt=&quot;curvelet analysis&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;curvelets.svg&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: Eric Regina&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Energy&lt;&#x2F;strong&gt;: This is a measure of the total &quot;energy&quot; in the curvelet coefficients (sum of the squared coefficients). A higher energy indicates that there are more significant features in the image. The generated images have significantly lower energy than the real images in the first scale. This suggests that they are missing some of the fine-scale structure present in the real images.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Kurtosis&lt;&#x2F;strong&gt;: This is a measure of the &quot;tailedness&quot; of the distribution of curvelet coefficients. A higher kurtosis indicates that there are more extreme values in the distribution. The generated images have a much lower kurtosis than the real images, which suggests that they are missing some of the extreme values present in the real images. This is likely because the generated images are smoother and less detailed than the real images.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Directional Anisotropy&lt;&#x2F;strong&gt;: This is a measure of the directional distribution of the curvelet coefficients. A higher directional anisotropy indicates that there are more coefficients in certain directions than others. The generated images have a much lower directional anisotropy than the real images, which suggests that they are missing some of the directional information present in the real images. Looking visually at the generated images, they tend to be more symmetric and uniform compared to the real images. That&#x27;s likely where this is coming from.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;In general, I didn&#x27;t find the curvlet analysis to be as informative as I had hoped. These methods were quite slow to compute (especially for all 7000 generated images), and the results were not as clear as the more traditional image processing techniques. That said, I am somewhat of a novice in the wavelet-based methods.&lt;&#x2F;p&gt;
+&lt;p&gt;Without a doubt, there &lt;strong&gt;are&lt;&#x2F;strong&gt; detectable differences between the two distributions.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-does-the-manifold-embedding-of-the-two-distributions-look-like&quot;&gt;What does the manifold embedding of the two distributions look like?&lt;&#x2F;h2&gt;
+&lt;p&gt;I then took a look at a manifold embedding of the two distributions. I used a pre-trained ResNext-101 model to extract features from the images and then used UMAP to reduce the dimensionality of the feature space to 2 dimensions for visualization. Below is the rather striking result.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;manifold.svg&quot; alt=&quot;manifold embedding&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;manifold.svg&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: Eric Regina&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;In the UMAP plot in the top left we can see that the two distributions are almost linearly separable.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The GAN model mostly covers the set of outliers.&lt;&#x2F;li&gt;
+&lt;li&gt;The GAN model seemingly ignores most of the &quot;core&quot; of the real distribution.&lt;&#x2F;li&gt;
+&lt;li&gt;About 10% of the real distribution is outliers.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We would expect to see mode collapse.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;checking-for-mode-collapse&quot;&gt;Checking for Mode Collapse&lt;&#x2F;h2&gt;
+&lt;p&gt;To check this a bit more directly, we ran a near-duplicate analysis using BiomedCLIP embeddings and flagged image pairs with cosine similarity at least &lt;code&gt;0.95&lt;&#x2F;code&gt;. This gives us a rough way to ask whether the model is actually producing diverse samples, or if it is mostly generating small variations of the same few images.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;near_duplicates.4c4e3eee25f67b0a.png&quot; alt=&quot;near duplicate summary&quot;
+     width=&quot;1280&quot; height=&quot;394&quot;
+     sizes=&quot;(min-width: 920px) 784px, (min-width: 700px) calc(82vw + 46px), calc(100vw - 40px)&quot; 
+     srcset=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;near_duplicates.3823794272ec5264.png 640w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;near_duplicates.309609c2839283ec.png 784w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;near_duplicates.81b5b50b6913d1a3.png 1280w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;near_duplicates.efea08f6f08be481.png 1920w&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;near_duplicates.png&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;richarnaud&#x2F;&quot;&gt;Rich Arnaud&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;mode_collapse.cf1d499807fdb7b1.png&quot; alt=&quot;mode collapse analysis&quot;
+     width=&quot;1280&quot; height=&quot;396&quot;
+     sizes=&quot;(min-width: 920px) 784px, (min-width: 700px) calc(82vw + 46px), calc(100vw - 40px)&quot; 
+     srcset=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;mode_collapse.9b6b5ef644163407.png 640w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;mode_collapse.3b06ff687158a517.png 784w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;mode_collapse.1e9c2a85c8066627.png 1280w,
+             https:&#x2F;&#x2F;ericregina.com&#x2F;processed_images&#x2F;mode_collapse.5a3d4b2526856506.png 1920w&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;mode_collapse.png&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;richarnaud&#x2F;&quot;&gt;Rich Arnaud&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;Here the picture is, unfortunately, quite clear. The real dataset does contain some near-duplicates, which is not especially surprising for CT slices, but the generated dataset is in a completely different regime. Over half of all possible generated-generated pairs are flagged as near-duplicates at this threshold, whereas the &quot;real-real&quot; comparisons are only around 8-10%. The second figure makes this even more striking: many generated images are near-duplicates of &lt;em&gt;&lt;strong&gt;several thousand&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; other generated images, and some individual samples are similar to more than 4,000 others. So rather than learning the full structure of the real distribution, the GAN appears to have collapsed onto a relatively small set of templates and is producing minor variations of them. At least on the 2025 data, it seems the evidence for substantial mode collapse is quite strong.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;future-work&quot;&gt;Future Work&lt;&#x2F;h2&gt;
+&lt;p&gt;We have already begun work on the 2026 dataset, and have generated some preliminary results utilizing flow matching, which I will cover in a future post. As a fun preview, check out the UMAP embedding of the 2026 data compared to the data we generate with flow matching. The results are quite promising, and we are seeing much better coverage of the real distribution with the flow matching model compared to the GAN.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;manifold_2026.svg&quot; alt=&quot;manifold embedding 2026&quot;
+     data-lightbox=&quot;https:&#x2F;&#x2F;ericregina.com&#x2F;image-clef-gans-eda&#x2F;manifold_2026.svg&quot;
+     loading=&quot;lazy&quot;&gt;
+    &lt;figcaption&gt;
+        &lt;p&gt;Credit: Eric Regina&lt;&#x2F;p&gt;
+    &lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;h2 id=&quot;special-thanks&quot;&gt;Special Thanks&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Thank you to my awesome team members &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;samirhadi&#x2F;&quot;&gt;Samir Hadi&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;richarnaud&#x2F;&quot;&gt;Rich Arnaud&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;Thank you to the amazing &lt;a href=&quot;https:&#x2F;&#x2F;datasciencegt.org&#x2F;&quot;&gt;Data Science @ GT&lt;&#x2F;a&gt; student organization for providing support and resources for this project. Thank you for pushing us to grow and learn. We really mean it.&lt;&#x2F;li&gt;
+&lt;li&gt;Thank you to the ImageCLEF 2026 organizers for providing the dataset and hosting the competition. We are excited to see how our work compares to other teams in the competition and to learn from their approaches as well.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>
